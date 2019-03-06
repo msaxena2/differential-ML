@@ -1,0 +1,223 @@
+% scalable bullet (need graphicx package)
+\newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
+
+% widebar (need amsmath package)
+% https://tex.stackexchange.com/questions/16337/
+%   can-i-get-a-widebar-without-using-the-mathabx-package
+\makeatletter
+\let\save@mathaccent\mathaccent
+\newcommand*\if@single[3]{%
+  \setbox0\hbox{${\mathaccent"0362{#1}}^H$}%
+  \setbox2\hbox{${\mathaccent"0362{\kern0pt#1}}^H$}%
+  \ifdim\ht0=\ht2 #3\else #2\fi
+  }
+%The bar will be moved to the right by a half of \macc@kerna, which is computed
+%by amsmath:
+\newcommand*\rel@kern[1]{\kern#1\dimexpr\macc@kerna}
+%If there's a superscript following the bar, then no negative kern may follow
+%the bar;
+%an additional {} makes sure that the superscript is high enough in this case:
+\newcommand*\widebar[1]{\@ifnextchar^{{\wide@bar{#1}{0}}}{\wide@bar{#1}{1}}}
+%Use a separate algorithm for single symbols:
+\newcommand*\wide@bar[2]{\if@single{#1}{\wide@bar@{#1}{#2}{1}}{\wide@bar@{#1}{#2}{2}}}
+\newcommand*\wide@bar@[3]{%
+  \begingroup
+  \def\mathaccent##1##2{%
+%Enable nesting of accents:
+    \let\mathaccent\save@mathaccent
+%If there's more than a single symbol, use the first character instead (see
+%below):
+    \if#32 \let\macc@nucleus\first@char \fi
+%Determine the italic correction:
+    \setbox\z@\hbox{$\macc@style{\macc@nucleus}_{}$}%
+    \setbox\tw@\hbox{$\macc@style{\macc@nucleus}{}_{}$}%
+    \dimen@\wd\tw@
+    \advance\dimen@-\wd\z@
+%Now \dimen@ is the italic correction of the symbol.
+    \divide\dimen@ 3
+    \@tempdima\wd\tw@
+    \advance\@tempdima-\scriptspace
+%Now \@tempdima is the width of the symbol.
+    \divide\@tempdima 10
+    \advance\dimen@-\@tempdima
+%Now \dimen@ = (italic correction / 3) - (Breite / 10)
+    \ifdim\dimen@>\z@ \dimen@0pt\fi
+%The bar will be shortened in the case \dimen@<0 !
+    \rel@kern{0.6}\kern-\dimen@
+    \if#31
+      \overline{\rel@kern{-0.6}\kern\dimen@\macc@nucleus\rel@kern{0.4}\kern\dimen@}%
+      \advance\dimen@0.4\dimexpr\macc@kerna
+%Place the combined final kern (-\dimen@) if it is >0 or if a superscript
+%follows:
+      \let\final@kern#2%
+      \ifdim\dimen@<\z@ \let\final@kern1\fi
+      \if\final@kern1 \kern-\dimen@\fi
+    \else
+      \overline{\rel@kern{-0.6}\kern\dimen@#1}%
+    \fi
+  }%
+  \macc@depth\@ne
+  \let\math@bgroup\@empty \let\math@egroup\macc@set@skewchar
+  \mathsurround\z@ \frozen@everymath{\mathgroup\macc@group\relax}%
+  \macc@set@skewchar\relax
+  \let\mathaccentV\macc@nested@a
+%The following initialises \macc@kerna and calls \mathaccent:
+  \if#31
+    \macc@nested@a\relax111{#1}%
+  \else
+%If the argument consists of more than one symbol, and if the first token is
+%a letter, use that letter for the computations:
+    \def\gobble@till@marker##1\endmarker{}%
+    \futurelet\first@char\gobble@till@marker#1\endmarker
+    \ifcat\noexpand\first@char A\else
+      \def\first@char{}%
+    \fi
+    \macc@nested@a\relax111{\first@char}%
+  \fi
+  \endgroup
+}
+\makeatother
+
+% fat colon
+\DeclareFontEncoding{LS1}{}{}
+\DeclareFontSubstitution{LS1}{stix}{m}{n}
+\DeclareSymbolFont{symbols2}{LS1}{stixfrak}{m}{n}
+\DeclareMathSymbol{\typecolon}{\mathbin}{symbols2}{"25}
+
+% ceiling and floor
+%\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+%\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\slashslash}{//\xspace}
+\newcommand{\spplus}{\textsuperscript{+}}
+\makeatletter
+\newcommand*{\Rnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+
+% parameters in curly brackets
+\newcommand{\param}[1]{\{#1\}}
+
+% mathit
+\newcommand{\curry}{\mathit{curry}}
+\newcommand{\uncurry}{\mathit{uncurry}}
+\newcommand{\Nat}{\mathit{Nat}}
+\newcommand{\zeroit}{{\mathit{zero}}}
+\newcommand{\succit}{\mathit{succ}}
+\newcommand{\plusit}{\mathit{plus}}
+\newcommand{\nilit}{\mathit{nil}}
+\newcommand{\consit}{\mathit{cons}}
+\newcommand{\MInt}{\mathit{MInt}}
+\newcommand{\Int}{\mathit{Int}}
+\newcommand{\minusit}{\mathit{minus}}
+\newcommand{\addinvit}{\mathit{inverse}}
+\newcommand{\appendit}{\mathit{append}}
+\newcommand{\mplus}{\mathit{mplus}}
+\newcommand{\mmult}{\mathit{mmult}}
+\newcommand{\List}{\mathit{List}}
+
+% mathsf
+\newcommand{\listsf}{\mathsf{list}}
+\newcommand{\natsf}{\mathsf{nat}}
+\newcommand{\intsf}{\mathsf{int}}
+\newcommand{\mintsf}{\mathsf{mint}}
+
+% logic names in mathsf
+\newcommand{\ML}{\textnormal{$\mathsf{ML}$}\xspace}
+\newcommand{\MLmono}{\textnormal{$\mathsf{ML}^\mathsf{\lowercase{mono}}$}\xspace}
+\newcommand{\MLtuple}{\textnormal{$\mathsf{ML}^\mathsf{\lowercase{tuple}}$}\xspace}
+\newcommand{\MLapp}{\textnormal{$\mathsf{ML}^\mathsf{\lowercase{app}}$}\xspace}
+
+% general math
+\newcommand{\imp}{\to}
+\newcommand{\dimp}{\leftrightarrow}
+\newcommand{\ldot}{\,\mathord{.}\,}
+\newcommand{\pset}[1]{\mathcal{P}(#1)}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\FFF}{\mathbb{F}}
+\newcommand{\GGG}{\mathbb{G}}
+\newcommand{\cln}{\mathord{:}}
+\newcommand{\Cln}{\,\mathord{\typecolon}\,}
+\newcommand{\FV}{\mathrm{FV}}
+\newcommand{\prule}[1]{(\textsc{#1})}
+\newcommand{\pto}{\rightharpoonup}
+
+% matching mu-logic
+\newcommand{\MmL}{\mathsf{MmL}}
+\newcommand{\EVar}{\textsc{EVar}}
+\newcommand{\SVar}{\textsc{SVar}}
+\newcommand{\rhobar}{\bar{\rho}}
+\newcommand{\Pattern}{\textsc{Pattern}}
+\newcommand{\sig}{\mathbb{\Sigma}}
+\newcommand{\Var}{\textsc{Var}}
+\newcommand{\inh}{\mathit{inh}}
+\newcommand{\signat}{\sig^\mathit{nat}}
+\newcommand{\Sigmanat}{\Sigma^\mathit{nat}}
+\newcommand{\Gammanat}{\Gamma^\mathit{nat}}
+\newcommand{\arity}{\mathit{arity}}
+
+% functional matching mu-logic
+\newcommand{\MmLi}{\AML}
+\newcommand{\dummysort}{\star}
+\newcommand{\EVari}{{{\textsc{EVar}}}}
+\newcommand{\SVari}{{{\textsc{SVar}}}}
+\newcommand{\Patterni}{{{\Pattern}}}
+\newcommand{\Sigmai}{{{\Sigma}}}
+\newcommand{\app}{\mathit{app}}
+\newcommand{\appdot}{\mathbin{\sbullet}}
+\newcommand{\vDashi}{\vDash_{\MmLi}{}}
+
+% monosorted
+\newcommand{\ccln}{\cln} % x \ccln s === x /\ x \in inh(#s)
+\newcommand{\mono}{{\mathsf{mono}}}
+\newcommand{\trsort}{\widetilde{\mathbb{M}}}
+\newcommand{\trsortpat}{\mathbb{M}}
+\newcommand{\trsortinfo}{\trsort_2}
+\newcommand{\sigsort}{\sig^\mathsf{mono}}
+\newcommand{\Varsort}{\Var^\mathsf{mono}}
+\newcommand{\Sigmasort}{\Sigma^\mathsf{mono}}
+\newcommand{\EVarsort}{\EVar^\mathsf{mono}}
+\newcommand{\SVarsort}{\SVar^\mathsf{mono}}
+\newcommand{\ssort}[1]{{\sharp #1}}
+\newcommand{\Gammasort}{{\Gamma^\mathsf{mono}}}
+\newcommand{\Msort}{{M^\mathsf{mono}}}
+\newcommand{\Msortu}{{M^\mathsf{mono}_\dummysort}}
+\newcommand{\rhosort}{{\rho^{\mathsf{mono}}}}
+\newcommand{\rhobarsort}{\widebar{\rhosort}}
+
+% multi-argument applicative
+\newcommand{\multsf}{\mathsf{mult}}
+\newcommand{\sigmult}{\sig^\mathsf{mult}}
+\newcommand{\Varmult}{\Var^\multsf}
+\newcommand{\Sigmamult}{\Sigma^\multsf}
+\newcommand{\EVarmult}{\EVar^\multsf}
+\newcommand{\SVarmult}{\SVar^\multsf}
+\newcommand{\tuple}{\mathit{tuple}}
+\newcommand{\Mmult}{M^\multsf}
+\newcommand{\Mmultu}{{M^\multsf_\dummysort}}
+
+% applicative matching logic
+\newcommand{\AML}{{\textnormal{$\mathsf{ML^\mathsf{app}}$}}\xspace}
+\newcommand{\trapp}{\mathbb{A}}
+\newcommand{\sigapp}{\sig^\mathsf{app}}
+\newcommand{\Varapp}{\Var^\mathsf{app}}
+\newcommand{\Sigmaapp}{\Sigma^\mathsf{app}}
+\newcommand{\EVarapp}{\EVar^\mathsf{app}}
+\newcommand{\SVarapp}{\SVar^\mathsf{app}}
+\newcommand{\sapp}[1]{{\sharp #1}}
+\newcommand{\Gammaapp}{{F^\mathsf{app}}}
+\newcommand{\sortnames}{\mathbb{s}}
+\newcommand{\papp}{\mathord{\ }}
+\newcommand{\Mstar}{M_\star}
+\newcommand{\Mapp}{{M^\mathsf{app}}}
+\newcommand{\Mappu}{{M^\mathsf{app}_\dummysort}}
+\newcommand{\sharpdummysort}{{\sharp\dummysort}}
+
+% hybrid automata in matching logic
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rn}{\R^{n}}
+\newcommand{\nonNegR}{\R_{\geq 0}}
+\newcommand{\posR}{\R_{> 0}}
+

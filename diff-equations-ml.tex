@@ -1,0 +1,76 @@
+ \documentclass[]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+
+\input{newcommands}
+
+\newcommand{\SortR}{S_{\R \rightarrow \R}}
+\newcommand{\differential}{\textit{differential}}
+
+\title{Differential Equations using Matching $\mu$-logic}
+
+\begin{document}
+\maketitle
+
+\section{Differentiation and Differentiable functions}
+
+Asssume sorts $\R$ and $\Rn$. Let $\nonNegR$ be the sort of non-negative
+reals, and $\posR$ the sort of positive reals.
+Given a function symbol $f \in \Sigma^{\nonNegR, \Rn}$,
+we define a symbol $\dot{f} \ \cln \ \posR, \Rn$ to be the first
+order derivative of a function w.r.t time, as follows -
+
+% For a given $f \in \Sigma_{\nonNegR, \Rn}$, we define symbol $\dot{f} \in
+% \Sigma_{\posR, \Rn}$ as follows -
+
+$$ \forall t \in \posR \ldot (\forall \epsilon : (\nonNegR)^n \ldot \exists \delta :
+\nonNegR \ldot (\forall 0 < h \leq \delta \ldot \frac{f(t + h) -f(t)}{h}) = \mid
+\dot{f}(t) - \epsilon \mid) $$
+
+
+
+% Consider $\SortR$ to be the sort of
+% functions from $\R \rightarrow \R$. We define a symbol $\differential : \SortR
+% \rightarrow \SortR$ to be the first order derivative of a function w.r.t. to time.
+% We use $f'$ as syntactic sugar for $\differential(f)$.
+%
+% Assume a predicate symbol $\textit{differentiable}$, which for a given function
+% $f$ is true iff $f$ is differentiable. We define $\differential$ as follows -
+%
+% $$ \forall f:\SortR\ \textit{differentiable}(f) \implies
+%   \exists y:\R . \forall t \geq 0 (\forall \epsilon : \R . \exists \delta : \R .
+%       (\forall 0 < h \leq \delta \;  \frac{f(t + h) -f(t)}{h}) = \mid f'(t) - \epsilon \mid = y) $$
+%
+%
+% \subsection{Differential Equations}
+% Given a function $\varphi:\SortR$, we define a symbol
+% $\int:\SortR \rightarrow \mathcal{P}(\SortR) $ as $\exists f . (\int(f))' =
+% \varphi$ (we naturally extend the $'$ symbol to operate over sets of functions).
+% Intuitively, $\int$ is the set of functions obtained by integrating $\varphi$.
+%
+% We also define a symbol $solution: \SortR \times \R \rightarrow \SortR$ as
+% follows:
+% $$ \forall c \geq 0 \exists f:\SortR . solution(\varphi, c) = f \wedge f' =
+% \varphi$$.
+%
+\section{Hybrid Automata}
+
+A hybrid automata $A = (Q,Q^0,V,E,\Sigma)$
+
+
+
+\end{document}
