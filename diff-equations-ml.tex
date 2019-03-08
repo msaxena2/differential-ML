@@ -38,8 +38,8 @@ order derivative of a function w.r.t time, as follows -
 % \Sigma_{\posR, \Rn}$ as follows -
 
 $$ \forall t \in \posR \ldot (\forall \epsilon : (\nonNegR) \ldot \exists \delta :
-\nonNegR \ldot (\forall 0 < h \leq \delta \ldot \frac{f(t + h) -f(t)}{h}) = \mid
-\dot{f}(t) - \epsilon \mid) $$
+\nonNegR \ldot (\forall 0 < h \leq \delta \ldot \mid \frac{f(t + h) -f(t)}{h} -
+\dot{f}(t) \mid ) \; \leq \; \epsilon) $$
 
 
 
@@ -67,10 +67,59 @@ $$ \forall t \in \posR \ldot (\forall \epsilon : (\nonNegR) \ldot \exists \delta
 % $$ \forall c \geq 0 \exists f:\SortR . solution(\varphi, c) = f \wedge f' =
 % \varphi$$.
 %
-\section{Hybrid Automata}
 
-A hybrid automata $A = (Q,Q^0,V,E,\Sigma)$
+\section{Preliminaries}
+\subsection{Hybrid Automata}
+Hybrid Automaton $H$ consists of -
+\begin{itemize}
+  \item \textbf{(Variables)} A finite set $X = \{x_1, x_2, \dots, x_n\} $ of real valued variables,
+    where $n$ is defined as the $dimensionality$ of $H$.
+     $\dot{X} = \{\dot{x_1}, \dot{x_2}, \dots, \dot{x_n} \}$ represents the
+     the first derivatives during continuous change, and $X' = \{x_1', x_2',
+     \dots, x_n' \}$ represents values at end of discrete change.
+   \item \textbf{(Control Graph)}. A finite directed multigraph $(V,E)$.
+     Vertices are referred to as \textit{Control modes} and edges as
+     \textit{Control Switches}.
+   \item \textbf{(Initial, Invariant, Flow)}. Vertex labeling functions
+     \textit{init}, \textit{inv}, and \textit{flow}. For each $v \in V$,
+     $\init(v)$ and $\inv(v)$ assign $v$ a predicate with free variables from
+     $X$, while $\flow(v)$ assigns $v$ a predicate with free variabls from $X
+     \cup X'$
+   \item \textbf{(Jump)}. Edge labeling function that for $e \in E$, assigns $e$
+     a predicate over $X \cup X'$.
+   \item \textbf{(Events)}. A finite set $\Sigma$ of events, and an edge
+     labeling function $\event \cln E \to \Sigma$, that assigns to each \textit{control
+     switch} $e \in E$, an event $s \in \Sigma$. Note that both $\Sigma$ and $E$
+     are finite, and an edge $e \in E$ is also called a \textit{control switch}.
 
+\end{itemize}
+
+\subsection{Labeled transition systems}
+For the purpose of this discussion, a labeled transition system $S$ consists of the following -
+\begin{itemize}
+  \item A possibly infinite set of states $Q$, and set $Q_0 \subseteq Q$ of
+    initial states.
+  \item A possibly infinite set $A$ of labels, and for each label $a \in A$, a
+    binary relation $\transRel$ on $Q$.
+\end{itemize}
+
+
+\subsection{Semantics of Hybrid Automata}
+Todo ...
+
+
+
+\subsection{Embedding in ML}
+Assume real numbers, or sorts $\R$, $\Rn$. We define a sort $\Cfg \equiv (V
+\times \Rn)$. Define symbol $\sbullet \in \Sigma_{A \Cfg, \Cfg}$, where $A
+\equiv \Sigma \cup \R$.
+
+Use the $\sbullet$ to capture the transition semantics of HAs as follows -
+\begin{itemize}
+  \item
+  \item For every $a \in A$, defined in the given automaton $HA$ is a binary
+    relation on $Q$.
+\end{itemize}
 
 
 \end{document}
