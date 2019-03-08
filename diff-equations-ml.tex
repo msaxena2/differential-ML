@@ -4,6 +4,7 @@
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{dirtytalk}
 
 %% Sets page size and margins
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
@@ -83,7 +84,7 @@ Hybrid Automaton $H$ consists of -
    \item \textbf{(Initial, Invariant, Flow)}. Vertex labeling functions
      \textit{init}, \textit{inv}, and \textit{flow}. For each $v \in V$,
      $\init(v)$ and $\inv(v)$ assign $v$ a predicate with free variables from
-     $X$, while $\flow(v)$ assigns $v$ a predicate with free variabls from $X
+     $X$, while $\flow(v)$ assigns $v$ a predicate with free variables from $X
      \cup X'$
    \item \textbf{(Jump)}. Edge labeling function that for $e \in E$, assigns $e$
      a predicate over $X \cup X'$.
@@ -104,8 +105,16 @@ For the purpose of this discussion, a labeled transition system $S$ consists of 
 \end{itemize}
 
 
-\subsection{Semantics of Hybrid Automata}
-Todo ...
+\subsection{Transition Semantics of Hybrid Automata}
+Define a \textit{timed transition system} $\StH$ of a given hybrid automaton
+$H$ to capture transition semantics of $H$.
+\begin{itemize}
+  \item Define $Q, Q_0 \subseteq (V \times \Rn)$. Say, $(v, \vec{x}) \in Q$ iff
+    $\inv(v)[\vec{x} / X]$ and $(v, \vec{x}) \in Q_0$ iff $\init(v)[\vec{x} /
+    X]$.
+  \item Define $A = \Sigma \cup \nonNegR $. Note $\nonNegR$ denotes the \say{timed}
+    part of the $H$.
+\end{itemize}
 
 
 
