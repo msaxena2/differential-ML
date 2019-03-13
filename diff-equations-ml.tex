@@ -170,8 +170,15 @@ the timed transition system semantics $\StH$ of $H$.
         specifically mean the free variables of the jump condition).
 \end{itemize}
 
+Add the following axiomatization to capture $\StH$.
+\begin{itemize}
+  \item (\textbf{Jump}) For each jump symbol $\phiJump(v,v',e)$
+    $$ ((\phiJump(v,v',e))_{\pi_1} \overarr{x}) \to
+    \sbullet(event(\phiJump(v,v',e)_{\pi_3}), (\phiJump(v,v',e)_{\pi_2},
+    \phiJump(v,v',e)_{\pi_3})) $$.
+  \item (\textbf{Flow})
 
-
+\end{itemize}
 
 
 
