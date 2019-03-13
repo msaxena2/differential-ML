@@ -5,6 +5,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{dirtytalk}
+\usepackage{mathbbol}
 
 %% Sets page size and margins
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
@@ -109,26 +110,81 @@ For the purpose of this discussion, a labeled transition system $S$ consists of 
 Define a \textit{timed transition system} $\StH$ of a given hybrid automaton
 $H$ to capture transition semantics of $H$.
 \begin{itemize}
-  \item Define $Q, Q_0 \subseteq (V \times \Rn)$. Say, $(v, \vec{x}) \in Q$ iff
-    $\inv(v)[\vec{x} / X]$ and $(v, \vec{x}) \in Q_0$ iff $\init(v)[\vec{x} /
+  \item Define $Q, Q_0 \subseteq (V \times \Rn)$. Say, $(v, \overarr{x}) \in Q$ iff
+    $\inv(v)[\overarr{x} / X]$ and $(v, \overarr{x}) \in Q_0$ iff $\init(v)[\overarr{x} /
     X]$.
   \item Define $A = \Sigma \cup \nonNegR $. Note $\nonNegR$ denotes the \say{timed}
     part of the $H$.
+  \item For given $\sigma \in \Sigma$, say $(v,x) \transRelSigma (v', x')$ iff
+    the following hold -
+    \begin{itemize}
+      \item There exists \textit{control switch} $e$ source $v$ and destination
+        $v'$.
+      \item $\textit{jump}(e)[\overarr{x} / X]$ holds, and $\textit{event}(e) = \sigma$.
+    \end{itemize}
+  \item For each non negative real $\delta \in \nonNegR$, say $(v,\overarr{x})
+    \transRelSigma (v', \overarr{x'})$ iff
+    \begin{itemize}
+      \item $ v = v' $
+      \item There exists a differentiable function $f \cln [0, \delta] \to \Rn$
+        where $\dot{f} \cln (0, \delta) \to \Rn$ is the first order
+        derivative of $f$. $f(0) = \overarr{x}$ and $f(\delta) = \overarr{x'}$
+        hold.
+      \item $\forall \epsilon \in (0, \delta)$, $\inv(v)[f(\epsilon) / X]$
+        and $\flow(v)[f(\epsilon) / X, \dot{f}(\epsilon) /  \dot{X}]$ hold.
+    \end{itemize}
 \end{itemize}
 
 
 
 \subsection{Embedding in ML}
-Assume real numbers, or sorts $\R$, $\Rn$. We define a sort $\Cfg \equiv (V
-\times \Rn)$. Define symbol $\sbullet \in \Sigma_{A \Cfg, \Cfg}$, where $A
-\equiv \Sigma \cup \R$.
+Our goal is, given a hybrid automaton $H$ with dimensionality $n$, to define a Mathcing $\mu$-logic
+theory $(\Sigma, A)$, s.t. any model $M \vDash (\Sigma, A)$ captures precisely
+the timed transition system semantics $\StH$ of $H$.
 
-Use the $\sbullet$ to capture the transition semantics of HAs as follows -
 \begin{itemize}
-  \item
-  \item For every $a \in A$, defined in the given automaton $HA$ is a binary
-    relation on $Q$.
+  \item Define $\boldH{\Sigma} = (\{V, E, \Rn, \R, \sortA\}, \VarH, \Sigma_H)$, where
+    \begin{itemize}
+      \item $V, E$ are the sorts of $H$'s finite directed graph $(V,E)$.
+      \item $\sortEvents$ the finite sort of $H$-events, and $\sortA =
+        \sortEvents \cup \nonNegR$.
+      \item A sort-indexed countably infinite set of variables $\VarH$ where
+        $X\cln \Rn, \dot{X} \cln \Rn X' \cln \Rn \in \VarH_{\Rn} $.
+      \item $\Sigma_H$ extends $\Sigma_{\Rn}$, where
+        $\Sigma_{\Rn}$ is assumed to be a signature over $\Rn$, an
+        n-dimensional real space.
+    \end{itemize}
+  \item Define $\sortCfg \equiv (V \times \Rn)$. Say $\sbullet \in
+    \Sigma_{\sortA \sortCfg, \sortCfg}$
+  \item For each $v \in V$, define -
+    \begin{itemize}
+      \item $\phiInv(v) \cln \Rn \equiv \inv(v)$ where $FV(\phiInv(v)) \subseteq
+        X$.
+      \item $\phiInit(v) \cln \Rn \equiv \init(v)$ where $FV(\phiInit(v))
+        \subseteq X$.
+      \item $\phiFlow(v) \cln \Rn \equiv \flow(v)$, where $FV(\phiFlow(v)) \subseteq X \cup \dot{X}$.
+    \end{itemize}
+  \item For each $e \in E$, $\phiJump(v,v',e) \cln (V \times V \times \Rn) \equiv
+        (\textit{source}(e), \textit{destination}(e), \textit{jump}(e)) $ where
+        $FV(\phiJump(v,v',e)) \subseteq X \cup X'$ (we
+        specifically mean the free variables of the jump condition).
 \end{itemize}
+
+
+
+
+
+
+% Assume real numbers, or sorts $\R$, $\Rn$. We define a sort $\Cfg \equiv (V
+% \times \Rn)$. Define symbol $\sbullet \in \Sigma_{A \Cfg, \Cfg}$, where $A
+% \equiv \Sigma \cup \R$.
+%
+% Use the $\sbullet$ to capture the transition semantics of HAs as follows -
+% \begin{itemize}
+%   \item
+%   \item For every $a \in A$, defined in the given automaton $HA$ is a binary
+%     relation on $Q$.
+% \end{itemize}
 
 
 \end{document}
